@@ -4,6 +4,18 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+let users = []
+
+const doesExist = (username)=>{
+  let userswithsamename = users.filter((user)=>{
+    return user.username === username
+  });
+  if(userswithsamename.length > 0){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 public_users.post("/register", (req,res) => {
   //Write your code here
@@ -22,10 +34,27 @@ public_users.post("/register", (req,res) => {
   //return res.status(300).json({message: "Yet to be implemented"});
 });
 
-// Get the book list available in the shop
+// Task 1: Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    // Asynchronous operation
+    new Promise((resolve, reject) => {
+        // 
+        if (books) {
+            resolve(books);
+        } else {
+            reject(new Error("Failed to retrieve books in the shop."));
+        }
+    })
+    .then(books => {
+        return res.send(JSON.stringify(books, null, 4));
+    })
+    .catch(error => {
+        // Log the error
+        console.error(error);
+        return res.status(500).send("An error occurred while retrieving the books in the shop.");
+        //return res.status(300).json({message: "Yet to be implemented"});
+    });
 });
 
 // Get book details based on ISBN (TASK 11)
