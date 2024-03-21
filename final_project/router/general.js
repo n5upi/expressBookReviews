@@ -4,8 +4,6 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-let users = []
-
 const doesExist = (username)=>{
   let userswithsamename = users.filter((user)=>{
     return user.username === username
@@ -36,50 +34,38 @@ public_users.post("/register", (req,res) => {
 
 // Task 1: Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-    // Asynchronous operation
-    new Promise((resolve, reject) => {
-        // 
-        if (books) {
-            resolve(books);
-        } else {
-            reject(new Error("Failed to retrieve books in the shop."));
-        }
-    })
-    .then(books => {
+    return new Promise((resolve, reject) => {
+        resolve(books);
+    }).then(books => {
         return res.send(JSON.stringify(books, null, 4));
-    })
-    .catch(error => {
-        // Log the error
+    }).catch(err => {
         console.error(error);
-        return res.status(500).send("An error occurred while retrieving the books in the shop.");
-        //return res.status(300).json({message: "Yet to be implemented"});
+        return res.status(500).send("Error occurred while retrieving the books in the shop.");
     });
 });
 
-// Get book details based on ISBN (TASK 11)
+// Task 2: Get book details based on ISBN (Task 11:)
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  const get_books_isbn = new Promise((resolve, reject) => {
-    const isbn = req.params.isbn;
-    // console.log(isbn);
-        if (req.params.isbn <= 10) {
-        resolve(res.send(books[isbn]));
-    }
-        else {
-            reject(res.send('ISBN not found'));
-        }
+    const get_books_isbn = new Promise((resolve, reject) => {
+      const isbn = req.params.isbn;
+      // console.log(isbn);
+          if (req.params.isbn <= 10) {
+          resolve(res.send(books[isbn]));
+      }
+          else {
+              reject(res.send('ISBN not found'));
+          }
+      });
+      get_books_isbn.
+          then(function(){
+              console.log("Promise for Task 11 is resolved");
+     }).
+          catch(function () { 
+                  console.log('ISBN not found');
     });
-    get_books_isbn.
-        then(function(){
-            console.log("Promise for Task 11 is resolved");
-   }).
-        catch(function () { 
-                console.log('ISBN not found');
-  });
-  //return res.status(300).json({message: "Yet to be implemented"});
- });
-  
+    
+   });
+
 // Get book details based on author (TASK 12)
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
