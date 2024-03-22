@@ -16,7 +16,6 @@ const doesExist = (username)=>{
 }
 
 public_users.post("/register", (req,res) => {
-  //Write your code here
   const username = req.body.username;
   const password = req.body.password;
 
@@ -66,9 +65,8 @@ public_users.get('/isbn/:isbn',function (req, res) {
     
    });
 
-// Get book details based on author (TASK 12)
+// Task 3: Get book details based on author (TASK 12)
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
   const get_books_author = new Promise((resolve, reject) => {
 
     let booksbyauthor = [];
@@ -92,12 +90,11 @@ public_users.get('/author/:author',function (req, res) {
    }).catch(function () { 
                 console.log('The mentioned author does not exist');
   });
-  //return res.status(300).json({message: "Yet to be implemented"});
+
 });
 
-// Get all books based on title (TASK 13)
+// Task 4: Get all books based on title (TASK 13)
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
   const get_books_title = new Promise((resolve, reject) => {
 
     let booksbytitle = [];
@@ -118,16 +115,22 @@ public_users.get('/title/:title',function (req, res) {
     get_books_title.then(function(){
             console.log("Promise is resolved");
    }).catch(function () { 
-                console.log('The mentioned book title doesnt exist');
+            console.log('The mentioned book title doesnt exist');
   });
-  //return res.status(300).json({message: "Yet to be implemented"});
+
 });
 
-//  Get book review
+//  Task 5: Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
+    const booksByIsbn = req.params.isbn;
+    const bookArray = Object.values(books);
 
-  return res.status(300).json({message: "Yet to be implemented"});
+    let filteredValues = bookArray.filter((book) => {
+        return book.reviews //&& book.reviews.some((review) => review.isbn === booksByIsbn);
+     
+    });
+
+    res.send(filteredValues);
 });
 
 module.exports.general = public_users;
