@@ -15,6 +15,7 @@ const doesExist = (username)=>{
   }
 }
 
+// Task 6: Complete the code for registering a new user
 public_users.post("/register", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -122,15 +123,17 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Task 5: Get book review
 public_users.get('/review/:isbn',function (req, res) {
-    const booksByIsbn = req.params.isbn;
-    const bookArray = Object.values(books);
+    const isbn = req.params.isbn
+    let booksArray = Object.values(books);
+    console.log(booksArray[isbn]);
 
-    let filteredValues = bookArray.filter((book) => {
-        return book.reviews //&& book.reviews.some((review) => review.isbn === booksByIsbn);
-     
-    });
+    if (req.params.isbn <= 9) {
+        return res.json(booksArray[isbn]);
+    }
+    else {
+        return res.status(404).json({message: "ISBN not found"});
+    }
 
-    res.send(filteredValues);
 });
 
 module.exports.general = public_users;
