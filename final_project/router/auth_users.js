@@ -30,7 +30,7 @@ let validusers = users.filter((user)=>{
 }
 
 // Task 7: only registered users can login
-regd_users.post("/customer/login", (req,res) => {
+regd_users.post("/login", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
   
