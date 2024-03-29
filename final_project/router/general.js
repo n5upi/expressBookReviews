@@ -32,14 +32,15 @@ public_users.post("/register", (req,res) => {
   //return res.status(300).json({message: "Yet to be implemented"});
 });
 
-// Task 1: Get the book list available in the shop
+// Task 1: Get the book list available in the shop (Task 10:)
 public_users.get('/',function (req, res) {
     return new Promise((resolve, reject) => {
         resolve(books);
     }).then(books => {
+        console.log("Promise for Task 10 is resolved");
         return res.send(JSON.stringify(books, null, 4));
     }).catch(err => {
-        console.error(error);
+        console.error(err);
         return res.status(500).send("Error occurred while retrieving the books in the shop.");
     });
 });
@@ -66,7 +67,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
     
    });
 
-// Task 3: Get book details based on author (TASK 12)
+// Task 3: Get book details based on author (TASK 12:)
 public_users.get('/author/:author',function (req, res) {
   const get_books_author = new Promise((resolve, reject) => {
 
@@ -87,9 +88,9 @@ public_users.get('/author/:author',function (req, res) {
     });
 
     get_books_author.then(function(){
-            console.log("Promise is resolved");
+            console.log("Promise for task 12 is resolved");
    }).catch(function () { 
-                console.log('The mentioned author does not exist');
+            console.log('The mentioned author does not exist');
   });
 
 });
@@ -114,7 +115,7 @@ public_users.get('/title/:title',function (req, res) {
        });
 
     get_books_title.then(function(){
-            console.log("Promise is resolved");
+            console.log("Promise for task 13 is resolved");
    }).catch(function () { 
             console.log('The mentioned book title doesnt exist');
   });
