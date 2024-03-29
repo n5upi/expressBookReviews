@@ -32,8 +32,41 @@ public_users.post("/register", (req,res) => {
   //return res.status(300).json({message: "Yet to be implemented"});
 });
 
-// Task 1: Get the book list available in the shop (Task 10:)
+// Task 1: Get the book list available in the shop
 public_users.get('/',function (req, res) {
+    return res.send(JSON.stringify(books, null, 4));
+});
+
+// Task 2: Get book details based on ISBN
+public_users.get('/isbn/:isbn',function (req, res) {
+    const isbn = req.params.isbn;
+    if (req.params.isbn <= 10) {
+        return res.send(JSON.stringify(books[isbn]));
+    }else{
+        return res.send('ISBN not found');
+    }
+});
+
+// Task 3: Get book details based on author
+public_users.get('/author/:author',function (req, res) {
+    let booksbyauthor = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+        //console.log(req.params.author);
+        if(books[isbn]["author"] === req.params.author) {
+            booksbyauthor.push({"isbn":isbn,
+                            "title":books[isbn]["title"],
+                            "reviews":books[isbn]["reviews"]});
+            return res.send(JSON.stringify({booksbyauthor}, null, 4));
+        }else{
+            return res.send('The mentioned author does not exist');
+        }
+    })
+
+});
+
+// Task 10: Get the book list available in the shop
+public_users.get('/task10',function (req, res) {
     return new Promise((resolve, reject) => {
         resolve(books);
     }).then(books => {
@@ -45,8 +78,8 @@ public_users.get('/',function (req, res) {
     });
 });
 
-// Task 2: Get book details based on ISBN (Task 11:)
-public_users.get('/isbn/:isbn',function (req, res) {
+// Task 11: Get book details based on ISBN
+public_users.get('/task11/isbn/:isbn',function (req, res) {
     const get_books_isbn = new Promise((resolve, reject) => {
       const isbn = req.params.isbn;
       // console.log(isbn);
@@ -67,8 +100,8 @@ public_users.get('/isbn/:isbn',function (req, res) {
     
    });
 
-// Task 3: Get book details based on author (TASK 12:)
-public_users.get('/author/:author',function (req, res) {
+// Task 12: Get book details based on author
+public_users.get('/task12/author/:author',function (req, res) {
   const get_books_author = new Promise((resolve, reject) => {
 
     let booksbyauthor = [];
@@ -83,7 +116,7 @@ public_users.get('/author/:author',function (req, res) {
 
 
     });
-    reject(res.send("The mentioned author does not exist "))
+    reject(res.send("The mentioned author does not exist"))
 
     });
 
