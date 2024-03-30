@@ -15,23 +15,6 @@ const doesExist = (username)=>{
   }
 }
 
-// Task 6: Complete the code for registering a new user
-public_users.post("/register", (req,res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  if (username && password) {
-    if (!doesExist(username)) { 
-      users.push({"username":username,"password":password});
-      return res.status(200).json({message: "User successfully registred. Now you can login"});
-    } else {
-      return res.status(404).json({message: "User already exists!"});    
-    }
-  } 
-  return res.status(404).json({message: "Unable to register user."});
-  //return res.status(300).json({message: "Yet to be implemented"});
-});
-
 // Task 1: Get the book list available in the shop
 public_users.get('/',function (req, res) {
     return res.send(JSON.stringify(books, null, 4));
@@ -65,6 +48,38 @@ public_users.get('/title/:title',function (req, res) {
     return res.status(300).json(filteredBooks);
 });
 
+//  Task 5: Get book review
+public_users.get('/review/:isbn',function (req, res) {
+    const isbn = req.params.isbn
+    let booksArray = Object.values(books);
+    console.log(booksArray[isbn]);
+
+    if (req.params.isbn <= 9) {
+        return res.json(booksArray[isbn]);
+    }
+    else {
+        return res.status(404).json({message: "ISBN not found"});
+    }
+
+});
+
+// Task 6: Complete the code for registering a new user
+public_users.post("/register", (req,res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+  
+    if (username && password) {
+      if (!doesExist(username)) { 
+        users.push({"username":username,"password":password});
+        return res.status(200).json({message: "User successfully registred. Now you can login"});
+      } else {
+        return res.status(404).json({message: "User already exists!"});    
+      }
+    } 
+    return res.status(404).json({message: "Unable to register user."});
+    //return res.status(300).json({message: "Yet to be implemented"});
+  });
+
 // Task 10: Get the book list available in the shop
 public_users.get('/task10',async function (req, res) {
     return new Promise((resolve, reject) => {
@@ -79,7 +94,7 @@ public_users.get('/task10',async function (req, res) {
 });
 
 // Task 11: Get book details based on ISBN
-public_users.get('/task11/isbn/:isbn',async function (req, res) {
+public_users.get('/task11/isbn/:isbn',function (req, res) {
     const get_books_isbn = new Promise((resolve, reject) => {
       const isbn = req.params.isbn;
       // console.log(isbn);
@@ -101,7 +116,7 @@ public_users.get('/task11/isbn/:isbn',async function (req, res) {
    });
 
 // Task 12: Get book details based on author
-public_users.get('/task12/author/:author',async function (req, res) {
+public_users.get('/task12/author/:author',function (req, res) {
   const get_books_author = new Promise((resolve, reject) => {
 
     let booksbyauthor = [];
@@ -154,22 +169,5 @@ public_users.get('task13/title/:title',function (req, res) {
     });
   
   });
-
-
-
-//  Task 5: Get book review
-public_users.get('/review/:isbn',function (req, res) {
-    const isbn = req.params.isbn
-    let booksArray = Object.values(books);
-    console.log(booksArray[isbn]);
-
-    if (req.params.isbn <= 9) {
-        return res.json(booksArray[isbn]);
-    }
-    else {
-        return res.status(404).json({message: "ISBN not found"});
-    }
-
-});
 
 module.exports.general = public_users;
